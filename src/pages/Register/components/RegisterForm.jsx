@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import AuthInput from '../../../components/form/AuthInput'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
 import { useForm } from 'react-hook-form'
+import { useDispatch, useSelector } from 'react-redux'
+import {signup} from "./../../../redux/userSlice"
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Please provide your name"),
@@ -12,11 +14,18 @@ const validationSchema = Yup.object({
 })
 
 export default function RegisterForm() {
+  const navigate = useNavigate();
+  const {isLoading, isLoggedIn, error} = useSelector(state => state.user);
+  const dispatch = useDispatch();
   const {register, handleSubmit, formState: { errors }} = useForm({resolver: yupResolver(validationSchema)});
 
-  const submitHandler = (data) => {
-    console.log(data)
+  const submitHandler = async(data) => {
+    dispatch(signup({...data}))
   }
+
+  useEffect(() => {
+    if(isLoggedIn) navigate('/')
+  }, [isLoggedIn])
 
   return (
     <div className='bg-white w-[450px] shadow-md rounded-md'>
@@ -36,11 +45,15 @@ export default function RegisterForm() {
 
           <div className='space-y-2 mb-3'>
             <label className='text-sm font-medium text-base-content block'>Password</label>
-            <AuthInput error={errors.password?.message} name={"password"} placeholder={"Enter your password"} register={register}/>
+            <AuthInput error={errors.password?.message} name={"password"} placeholder={"Enter your password"} register={register} type={"password"}/>
           </div>
           
           <div className='space-y-2 mb-3'>
-            <button className='btn btn-primary w-full text-lg'>Register</button>
+            <button className={`btn btn-primary w-full text-lg`}>
+              {isLoading ? <span className='loading loading-spinner'>loading</span> :<span>Register</span> }
+            </button>
+
+            {error && <p className='text-error text-sm mt-1'>{error}</p>} 
           </div>
           
           <div>
