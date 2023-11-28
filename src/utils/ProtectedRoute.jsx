@@ -1,15 +1,19 @@
 import React, { useEffect } from 'react'
-import LoginForm from './components/LoginForm'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
+import { getCurrentUser } from '../redux/userSlice';
+import LoginPage from '../pages/Login/LoginPage';
 
-export default function LoginPage() {
-  const navigate =useNavigate();
+export default function ProtectedRoute({children}) {
+  const navigate = useNavigate();
   const {isLoggedIn, isLoading} = useSelector(state => state.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if(isLoggedIn) navigate('/')
-
+    if(!isLoggedIn){
+      dispatch(getCurrentUser());
+      navigate('/login');
+    }
   }, [isLoggedIn])
 
   if(isLoading)
@@ -18,12 +22,8 @@ export default function LoginPage() {
         <span className='loading loading-spinner text-primary loading-lg'></span>
       </div>
     </div>
-    
+
   return (
-    <div className='h-screen bg-slate-100 relative'>
-        <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2'>
-            <LoginForm/>
-        </div>
-    </div>
+    <>{isLoggedIn ? children : <LoginPage/>}</>
   )
 }

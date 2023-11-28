@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import AuthService from "./../services/auth.api"
+import UserService from "./../services/user.api"
 
 const initialState = {
     error: "",
@@ -14,6 +15,16 @@ export const signup = createAsyncThunk('user/signup', async(values, {rejectWithV
         return data;
     } catch (error) {
         return rejectWithValue(error.response.data.message);
+    }
+})
+
+export const getCurrentUser = createAsyncThunk('user/getCurrentUser', async(values, {rejectWithValue}) =>{
+    try {
+        const data = await UserService.getCurrentUser();
+
+        return data;
+    } catch (error) {
+        return rejectWithValue(error.response.data.message)
     }
 })
 
@@ -39,11 +50,26 @@ const userSlice = createSlice({
             localStorage.setItem('refresh_token', refreshToken)
             state.currentUser = user;
             state.isLoading = false;
+            state.error = null;
             state.isLoggedIn = true;
         })
         .addCase(signup.rejected, (state, action) => {
             state.error = action.payload;
             state.isLoading = false;
+        })
+        .addCase(getCurrentUser.pending, (state, action) => {
+            state.isLoading = true;
+            state.error = null
+        })
+        .addCase(getCurrentUser.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.error = null;
+            state.currentUser = action.payload.data;
+            state.isLoggedIn = true
+        })
+        .addCase(getCurrentUser.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload;
         })
     }
 })

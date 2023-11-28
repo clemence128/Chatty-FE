@@ -1,6 +1,7 @@
 import axiosClient from "./axiosClient";
 const AUTH_URL = {
-    REGISTER: 'auth/signup'
+    REGISTER: 'auth/signup',
+    REFRESH_TOKEN: 'auth/refreshToken'
 }
 
 class AuthService{
@@ -12,7 +13,18 @@ class AuthService{
        } catch (error) {
            throw error;
        }
-   }
+    }
+
+    async refreshToken(){
+        try { 
+            const {data} = await axiosClient.post(AUTH_URL.REFRESH_TOKEN, {
+                refreshToken: localStorage.getItem('refresh_token')
+            })
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
 
 }
 
