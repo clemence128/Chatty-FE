@@ -1,7 +1,7 @@
 import axiosClient from "./axiosClient";
 const USER_URL = {
-    CURRENT_USER: 'user/currentUser',
-    SEARCH: '/user'
+    CURRENT_USER: 'users/currentUser',
+    SEARCH: '/users'
 }
 
 class UserService {
