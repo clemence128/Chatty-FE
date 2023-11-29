@@ -81,6 +81,7 @@ const userSlice = createSlice({
         .addCase(getCurrentUser.rejected, (state, action) => {
             state.isLoading = false;
             state.error = action.payload;
+            state.isLoggedIn = false;
         })
         .addCase(login.pending, (state, action) => {
             state.isLoading = true;
@@ -97,7 +98,6 @@ const userSlice = createSlice({
             state.isLoggedIn = true;
         })
         .addCase(login.rejected, (state, action) => {
-            console.log(action)
             state.isLoading = false;
             state.error = action.payload;
         })

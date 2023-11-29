@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AuthInput from '../../../components/form/AuthInput'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
@@ -13,13 +13,15 @@ const validationSchema = Yup.object({
 })
 
 export default function LoginForm() {
-  const {isLoading} = useSelector(state => state.user);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const {isLoading, error} = useSelector(state => state.user);
   const dispatch = useDispatch();
   
   const {register, handleSubmit, formState: { errors }} = useForm({resolver: yupResolver(validationSchema)});
 
   const submitHandler = (data) => {
     dispatch(login(data))
+    setIsSubmitted(true)
   }
 
   return (
@@ -42,6 +44,8 @@ export default function LoginForm() {
             <button className='btn btn-primary w-full text-lg'>
               {isLoading ? <span className='loading loading-spinner'>loading</span> : <span>Login</span>}
             </button>
+
+            {isSubmitted && error && <p className='text-error text-sm mt-1'>{error}</p>} 
           </div>
           
           <div>

@@ -10,8 +10,12 @@ export default function SearchResult({loading, result, isSearching}) {
     </div>
   }
   return (
-    <div className='flex-1'>
-      {result.map(el => <SearchResultItem result={el} key={el._id}/>)}
+    <div className='flex-1 overflow-y-scroll bg-base-100'>
+      {result.length === 0 
+      ? <div className='h-full flex items-center justify-center'>
+        <p className='text-error'>Oops! No matching results found.</p>
+      </div> 
+      : result.map(el => <SearchResultItem result={el} key={el._id}/>)}
     </div>
   )
 }

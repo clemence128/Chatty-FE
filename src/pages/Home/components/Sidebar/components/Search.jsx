@@ -16,11 +16,12 @@ export default function Search({search, setSearch, setIsLoading, setSearchResult
   const closeSearchHandler = (e) => {
     e.preventDefault();
     setIsSearching(false);
+    setSearch("")
   }
 
   return (
     <form onSubmit={serachSubmitHandler} className='relative'>
-      <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder='Enter name' className='p-2 bg-base-300 w-full outline-none border focus:ring-primary focus:border-primary text-base-content transition'/>
+      <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder='Enter name' className='p-2 bg-white w-full outline-none border focus:ring-primary focus:border-primary text-base-content transition'/>
       {isSearching ?
         <button type='button' onClick={closeSearchHandler} className='outline-none btn btn-sm btn-ghost rounded-none h-full flex items-center justify-center absolute top-0 right-0'>
           <IoMdClose className='w-5 h-5'/>

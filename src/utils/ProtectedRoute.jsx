@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 import { getCurrentUser } from '../redux/userSlice';
 import LoginPage from '../pages/Login/LoginPage';
 
@@ -9,11 +9,17 @@ export default function ProtectedRoute({children}) {
   const {isLoggedIn, isLoading} = useSelector(state => state.user);
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const checkUserToken = async() => {
     if(!isLoggedIn){
-      dispatch(getCurrentUser());
-      navigate('/login');
+      const response = await dispatch(getCurrentUser());
+      const {requestStatus} = response.meta;
+      if(requestStatus === 'rejected')
+        navigate('/login');
     }
+  }
+
+  useEffect(() => {
+    checkUserToken();
   }, [isLoggedIn])
 
   if(isLoading)
@@ -24,6 +30,6 @@ export default function ProtectedRoute({children}) {
     </div>
 
   return (
-    <>{isLoggedIn ? children : <LoginPage/>}</>
+    <>{isLoggedIn ? children : ''}</>
   )
 }

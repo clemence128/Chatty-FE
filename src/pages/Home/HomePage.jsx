@@ -4,7 +4,7 @@ import ChatContent from './components/ChatContent/ChatContent'
 
 export default function HomePage() {
   return (
-    <div className='h-screen flex'>
+    <div className='h-screen flex overflow-hidden'>
         <Sidebar/>
         <ChatContent/>
     </div>
