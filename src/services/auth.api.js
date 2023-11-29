@@ -1,6 +1,7 @@
 import axiosClient from "./axiosClient";
 const AUTH_URL = {
     REGISTER: 'auth/signup',
+    LOGIN: 'auth/signin',
     REFRESH_TOKEN: 'auth/refreshToken'
 }
 
@@ -13,6 +14,15 @@ class AuthService{
        } catch (error) {
            throw error;
        }
+    }
+
+    async signin({email, password}){
+        try {
+            const {data} = await axiosClient.post(AUTH_URL.LOGIN, {email: email, password: password})
+            return data;
+        } catch (error) {
+            throw error;
+        }
     }
 
     async refreshToken(){

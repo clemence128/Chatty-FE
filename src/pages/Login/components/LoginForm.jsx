@@ -2,12 +2,24 @@ import React from 'react'
 import AuthInput from '../../../components/form/AuthInput'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { useDispatch, useSelector } from 'react-redux'
+import { login } from '../../../redux/userSlice'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as Yup from "yup"
+
+const validationSchema = Yup.object({
+  email: Yup.string().required("Please provide your email").email("Please provide a valid email"),
+  password: Yup.string().required("Please provide your password").min(8, "Password must be at least 8 characters").max(32, "Password must be at least 32 characters")
+})
 
 export default function LoginForm() {
-  const {register, handleSubmit} = useForm();
+  const {isLoading} = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  
+  const {register, handleSubmit, formState: { errors }} = useForm({resolver: yupResolver(validationSchema)});
 
   const submitHandler = (data) => {
-    console.log(data);
+    dispatch(login(data))
   }
 
   return (
@@ -18,16 +30,18 @@ export default function LoginForm() {
         <form onSubmit={handleSubmit(submitHandler)}>
           <div className='space-y-2 mb-3'>
             <label className='text-sm font-medium text-base-content block'>Email</label>
-            <AuthInput name={"email"} placeholder={"Enter your email"} register={register}/>
+            <AuthInput error={errors.email?.message} name={"email"} placeholder={"Enter your email"} register={register}/>
           </div>
 
           <div className='space-y-2 mb-3'>
             <label className='text-sm font-medium text-base-content block'>Password</label>
-            <AuthInput name={"password"} placeholder={"Enter your password"} register={register}/>
+            <AuthInput error={errors.password?.message} type='password' name={"password"} placeholder={"Enter your password"} register={register}/>
           </div>
           
           <div className='space-y-2 mb-3'>
-            <button className='btn btn-primary w-full text-lg'>Login</button>
+            <button className='btn btn-primary w-full text-lg'>
+              {isLoading ? <span className='loading loading-spinner'>loading</span> : <span>Login</span>}
+            </button>
           </div>
           
           <div>
