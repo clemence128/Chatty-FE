@@ -1,6 +1,7 @@
 import axiosClient from "./axiosClient";
 const USER_URL = {
-    CURRENT_USER: 'user/currentUser'
+    CURRENT_USER: 'user/currentUser',
+    SEARCH: '/user'
 }
 
 class UserService {
@@ -18,6 +19,19 @@ class UserService {
         }
     }
 
+    async searchUsers(search){
+        try {
+            const {data} = await axiosClient.get(`${USER_URL.SEARCH}?search=${search}`, {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('access_token')
+                }
+            });
+
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default new UserService();

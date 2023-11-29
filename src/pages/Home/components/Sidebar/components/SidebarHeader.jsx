@@ -1,6 +1,8 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {logout} from "./../../../../../redux/userSlice"
+import { IoMdLogOut } from "react-icons/io";
+
 
 export default function SidebarHeader() {
     const {currentUser} = useSelector(state => state.user);
@@ -11,7 +13,7 @@ export default function SidebarHeader() {
     }
 
     return (
-        <div className='p-3'>
+        <div className='p-3 bg-base-200'>
             <div className='flex gap-2 items-center justify-between'>
                 <div className='flex gap-2 items-center'>
                     <div className='avatar online'>
@@ -21,12 +23,14 @@ export default function SidebarHeader() {
                     </div>    
 
                     <div>
-                        <p className='text-lg'>{currentUser.name}</p>
+                        <p className='text-lg font-semibold'>{currentUser.name}</p>
                     </div>
                 </div>
 
                 <div>
-                    <button onClick={logoutHandler} type='button' className='btn btn-link'>Logout</button>
+                    <button onClick={logoutHandler} type='button' className='btn btn-ghost'>
+                        <IoMdLogOut className='w-7 h-7'/>
+                    </button>
                 </div>
             </div>
         </div>
