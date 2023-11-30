@@ -4,9 +4,9 @@ const BASE_URL = {
 }
 
 class ConservationService{
-    async getConservations(userId){
+    async getConservations(){
         try {
-            const {data} = await axiosClient.get(`${BASE_URL.GET_CONSERVATION}/${userId}`, {
+            const {data} = await axiosClient.get(BASE_URL.GET_CONSERVATION, {
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('access_token')
                 }

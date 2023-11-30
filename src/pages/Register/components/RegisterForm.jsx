@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import AuthInput from '../../../components/form/AuthInput'
 import { Link, useNavigate } from 'react-router-dom'
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -18,9 +18,11 @@ export default function RegisterForm() {
   const {isLoading, isLoggedIn, error} = useSelector(state => state.user);
   const dispatch = useDispatch();
   const {register, handleSubmit, formState: { errors }} = useForm({resolver: yupResolver(validationSchema)});
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const submitHandler = async(data) => {
     dispatch(signup({...data}))
+    setIsSubmitted(true)
   }
 
   useEffect(() => {
@@ -53,7 +55,7 @@ export default function RegisterForm() {
               {isLoading ? <span className='loading loading-spinner'>loading</span> :<span>Register</span> }
             </button>
 
-            {error && <p className='text-error text-sm mt-1'>{error}</p>} 
+            {isSubmitted && error && <p className='text-error text-sm mt-1'>{error}</p>} 
           </div>
           
           <div>
