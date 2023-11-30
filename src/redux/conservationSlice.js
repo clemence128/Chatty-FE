@@ -4,7 +4,6 @@ import ConservationService from "./../services/conservation.api"
 const initialState = {
     conservations: [],
     currentConservation: null,
-    messages: [],
     isLoading: false,
     error: null
 }
