@@ -22,7 +22,7 @@ export default function SidebarContent() {
     <div className='h-full flex flex-col'>
       <Search search={search} setIsSearching={setIsSearching} isSearching={isSearching} setSearch={setSearch} setIsLoading={setIsLoading} setSearchResult={setSearchResult}/>
       {isSearching 
-        ? <SearchResult loading={isLoading} result={searchResult} isSearching={isSearching}/>
+        ? <SearchResult loading={isLoading} result={searchResult} isSearching={isSearching} setIsSearching={setIsSearching}/>
         : <ConservationsContainer/>
       }
     </div>

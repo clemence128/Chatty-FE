@@ -1,7 +1,7 @@
 import React from 'react'
 import SearchResultItem from './SearchResultItem'
 
-export default function SearchResult({loading, result, isSearching}) {
+export default function SearchResult({loading, result, isSearching, setIsSearching}) {
   if(!isSearching) return <></>
 
   if(loading){
@@ -15,7 +15,7 @@ export default function SearchResult({loading, result, isSearching}) {
       ? <div className='h-full flex items-center justify-center'>
         <p className='text-error'>Oops! No matching results found.</p>
       </div> 
-      : result.map(el => <SearchResultItem result={el} key={el._id}/>)}
+      : result.map(el => <SearchResultItem result={el} key={el._id} setIsSearching={setIsSearching}/>)}
     </div>
   )
 }
