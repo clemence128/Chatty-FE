@@ -27,7 +27,11 @@ export const createMessage = createAsyncThunk("message/createMessage", async(val
 const messageSlice = createSlice({
     name: 'message',
     initialState,
-    reducers: {},
+    reducers: {
+        addMessage(state, action){
+            state.messages = [...state.messages, action.payload];
+        }
+    },
     extraReducers(builder){
         builder.addCase(getMessagesByConservation.pending, (state, action) => {
             state.isLoading = true
@@ -49,5 +53,7 @@ const messageSlice = createSlice({
         })
     }
 })
+
+export const {addMessage} = messageSlice.actions;
 
 export default messageSlice.reducer;

@@ -3,19 +3,24 @@ import { HiOutlinePaperClip } from "react-icons/hi";
 import { BiRightArrowAlt } from "react-icons/bi";
 import { useDispatch, useSelector } from 'react-redux';
 import { createMessage } from '../../../../../redux/messageSlice';
+import {useSocket} from "./../../../../../contexts/socket.context"
+import { updateLatestMessage } from '../../../../../redux/conservationSlice';
 
 export default function ChatContentAction() {
+    const {socket} = useSocket();
     const [message, setMessage] = useState('');
     const {isLoading} = useSelector(state => state.message);
     const {currentConservation} = useSelector(state => state.conservation);
     const dispatch = useDispatch()
 
-    const sendMessageHandler = (e) => {
+    const sendMessageHandler = async(e) => {
         e.preventDefault()
         if(message.trim() === '') return;
 
-        dispatch(createMessage({conservationId: currentConservation._id, content: message.trim()}))
-
+        const response = await dispatch(createMessage({conservationId: currentConservation._id, content: message.trim()}))
+        const {data} = response.payload;
+        dispatch(updateLatestMessage(data));
+        socket.emit('sendMessage', {message: data, conservation: currentConservation})
         setMessage('')
 
     }

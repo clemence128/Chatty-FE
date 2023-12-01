@@ -34,6 +34,17 @@ const conservationSlice = createSlice({
     reducers: {
         selectConservation(state, action){
             state.currentConservation = action.payload
+        },
+        updateLatestMessage(state, action){
+            const latestMessage = action.payload;
+            state.conservations = state.conservations.map(el => {
+                if(el._id === latestMessage.conservation){
+                    el.latestMessage = latestMessage;
+                    el.updatedAt = latestMessage.updatedAt
+                }
+
+                return el;
+            }).sort((a, b) => b.updatedAt - a.updatedAt)
         }
     },
     extraReducers(builders){
@@ -71,6 +82,6 @@ const conservationSlice = createSlice({
     }
 })
 
-export const {selectConservation} = conservationSlice.actions;
+export const {selectConservation, updateLatestMessage} = conservationSlice.actions;
 
 export default conservationSlice.reducer;

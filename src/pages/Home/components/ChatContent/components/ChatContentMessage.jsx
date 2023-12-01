@@ -1,11 +1,26 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import MessageItem from './MessageItem'
+import {useSocket} from "./../../../../../contexts/socket.context"
+import {addMessage} from "./../../../../../redux/messageSlice"
 
 const TODAY = new Date()
 
 export default function ChatContentMessage() {
+  const {socket} = useSocket()
   const {messages} = useSelector(state => state.message)
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    socket.on('receivedMessage', (data) => {
+      dispatch(addMessage(data));
+    })
+
+    return () => {
+      socket.off('receivedMessage')
+    }
+  }, [])
+
   let lastDisplayDate = '';
   return (
     <div className='flex-1 py-6 px-11 overflow-y-scroll'>

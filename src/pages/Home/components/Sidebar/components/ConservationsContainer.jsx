@@ -1,9 +1,10 @@
 import React from 'react'
-import {useSelector} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
 import ConservationCard from "./ConservationCard"
 
 export default function ConservationsContainer() {
   const {conservations, isLoading} = useSelector(state => state.conservation)
+  const dispatch = useDispatch();
 
   if(isLoading){
     return (
@@ -12,7 +13,8 @@ export default function ConservationsContainer() {
       </div>
     )
   }
-  
+
+
   return (
     <div className='h-full'>
       {conservations.length === 0 
