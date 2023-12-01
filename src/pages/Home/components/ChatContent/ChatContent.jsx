@@ -1,17 +1,25 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getMessagesByConservation } from '../../../../redux/messageSlice';
+import ChatContentHeader from "./components/ChatContentHeader"
+import ChatContentMessage from "./components/ChatContentMessage"
+import ChatContentAction from './components/ChatContentAction';
 
 export default function ChatContent() {
   const {currentConservation} = useSelector(state => state.conservation)
-  const {isLoading} = useSelector(state => state.message)
+  const [isLoading, setIsLoading] = useState(false)
 
   const dispatch = useDispatch();
   
-  useEffect(() => {
+  const getMessagesByConservationHandler = async() => {
     if(currentConservation){
-      dispatch(getMessagesByConservation(currentConservation._id))
+      setIsLoading(true)
+      await dispatch(getMessagesByConservation(currentConservation._id))
+      setIsLoading(false)
     }
+  }
+  useEffect(() => {
+    getMessagesByConservationHandler();
   }, [currentConservation])
 
   if(isLoading){
@@ -20,7 +28,17 @@ export default function ChatContent() {
     </div>
   }
 
+  if(!currentConservation){
+    return <div className='flex-1 h-full w-full items-center justify-center bg-pink-400'>
+      <span></span>
+    </div>
+  }
+
   return (
-    <div className='flex-1 h-full'>ChatContent</div>
+    <div className='flex-1 h-full flex flex-col'>
+      <ChatContentHeader/>
+      <ChatContentMessage/>
+      <ChatContentAction/>
+    </div>
   )
 }
