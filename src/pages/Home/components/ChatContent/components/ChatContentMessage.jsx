@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import MessageItem from './MessageItem'
 import {useSocket} from "./../../../../../contexts/socket.context"
 import {addMessage} from "./../../../../../redux/messageSlice"
+import { updateLatestMessage } from '../../../../../redux/conservationSlice'
 
 const TODAY = new Date()
 
@@ -13,7 +14,9 @@ export default function ChatContentMessage() {
 
   useEffect(() => {
     socket.on('receivedMessage', (data) => {
-      dispatch(addMessage(data));
+      const {message, conservation} = data;
+      dispatch(addMessage(message));
+      dispatch(updateLatestMessage(message))
     })
 
     return () => {
