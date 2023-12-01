@@ -18,6 +18,14 @@ export default function ConservationCard({conservation}) {
     socket.emit('joinConservation', {conservation})
   }
 
+  useEffect(() => {
+    socket.on('receivedMessage', (data) => {
+      const {message, conservation} = data;
+      dispatch(updateLatestMessage(message))
+    })
+
+  }, [])
+  
   return (
     <div onClick={selectConservationHandler} className={`py-4 px-2 hover:bg-base-300 transition cursor-pointer ${currentConservation?._id === conservation._id ? 'bg-base-300' : ''}`}>
       <div className='flex gap-2 items-center justify-between'>

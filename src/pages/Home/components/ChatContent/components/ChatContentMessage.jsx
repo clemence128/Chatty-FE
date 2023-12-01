@@ -14,7 +14,7 @@ export default function ChatContentMessage() {
 
   useEffect(() => {
     socket.on('receivedMessage', (data) => {
-      const {message, conservation} = data;
+      const {message, conservation} = data
       dispatch(addMessage(message));
       dispatch(updateLatestMessage(message))
     })
