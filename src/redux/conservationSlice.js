@@ -45,6 +45,18 @@ const conservationSlice = createSlice({
 
                 return el;
             }).sort((a, b) => b.updatedAt - a.updatedAt)
+        },
+        addConservation(state, action){
+            const ids = []
+            const finalConservations = [];
+            [...state.conservations, action.payload].forEach(el => {
+                if(!ids.includes(el._id)){
+                    ids.push(el._id);
+                    finalConservations.push(el);
+                }
+            })
+            
+            state.conservations = finalConservations;
         }
     },
     extraReducers(builders){
@@ -82,6 +94,6 @@ const conservationSlice = createSlice({
     }
 })
 
-export const {selectConservation, updateLatestMessage} = conservationSlice.actions;
+export const {selectConservation, updateLatestMessage, addConservation} = conservationSlice.actions;
 
 export default conservationSlice.reducer;

@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import getConservationInfo from '../../../../../utils/getConservationInfo';
-import { selectConservation, updateLatestMessage } from '../../../../../redux/conservationSlice';
+import { selectConservation } from '../../../../../redux/conservationSlice';
 import moment from 'moment/moment';
 import { useSocket } from '../../../../../contexts/socket.context';
 
@@ -17,14 +17,6 @@ export default function ConservationCard({conservation}) {
     dispatch(selectConservation(conservation))
     socket.emit('joinConservation', {conservation})
   }
-
-  useEffect(() => {
-    socket.on('receivedMessage', (data) => {
-      const {message, conservation} = data;
-      dispatch(updateLatestMessage(message))
-    })
-
-  }, [])
   
   return (
     <div onClick={selectConservationHandler} className={`py-4 px-2 hover:bg-base-300 transition cursor-pointer ${currentConservation?._id === conservation._id ? 'bg-base-300' : ''}`}>
