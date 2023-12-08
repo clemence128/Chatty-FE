@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import MessageItem from './MessageItem'
 import {useSocket} from "./../../../../../contexts/socket.context"
@@ -8,6 +8,7 @@ import { updateLatestMessage } from '../../../../../redux/conservationSlice'
 const TODAY = new Date()
 
 export default function ChatContentMessage() {
+  const endRef = useRef();
   const {socket} = useSocket()
   const {messages} = useSelector(state => state.message)
   const dispatch = useDispatch();
@@ -24,9 +25,13 @@ export default function ChatContentMessage() {
     }
   }, [])
 
+  useEffect(() => {
+    endRef.current.scrollIntoView({behavior: 'smooth', block: 'nearest'})
+  }, [messages])
+
   let lastDisplayDate = '';
   return (
-    <div className='flex-1 py-6 px-11 overflow-y-scroll'>
+    <div className='flex-1 py-6 px-11 overflow-auto overflow-y-scroll'>
       <div className='flex flex-col gap-3'>
         {messages.map(message => {
           let html;
@@ -47,6 +52,7 @@ export default function ChatContentMessage() {
           </React.Fragment>
         })}
       </div>
+      <div className='mt-2' ref={endRef}></div>
     </div>
   )
 }

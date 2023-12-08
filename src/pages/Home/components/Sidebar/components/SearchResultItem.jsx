@@ -1,13 +1,17 @@
 import React from 'react'
 import { useDispatch } from 'react-redux';
 import { openConservation } from '../../../../../redux/conservationSlice';
+import {useSocket} from "./../../../../../contexts/socket.context"
 
 export default function SearchResultItem({result, setIsSearching}) {
+  const {socket} = useSocket();
     const {_id, name, avatar} = result;
     const dispatch = useDispatch();
 
-    const openConservationHandler = () => {
-      dispatch(openConservation(_id))
+    const openConservationHandler = async() => {
+      const result = await dispatch(openConservation(_id))
+      const {data} = result.payload
+      socket.emit('joinConservation', {conservation: data})
       setIsSearching(false)
     }
 

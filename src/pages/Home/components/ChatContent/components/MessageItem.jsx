@@ -23,7 +23,7 @@ console.log(message)
       </div> : <></>}
 
       <div className='chat-header'>
-        {sender?.name} 
+        {!isUserMessage() ? sender?.name: ''} 
       </div>
       <div className={`chat-bubble ${isUserMessage() ? 'chat-bubble-primary' : ''}`}>{content}</div>
       <div className='chat-footer'>
