@@ -4,8 +4,11 @@ import { getMessagesByConservation } from '../../../../redux/messageSlice';
 import ChatContentHeader from "./components/ChatContentHeader"
 import ChatContentMessage from "./components/ChatContentMessage"
 import ChatContentAction from './components/ChatContentAction';
+import FilePreview from './components/FilePreview';
 
 export default function ChatContent() {
+  const {files} = useSelector(state => state.message)
+  console.log(files)
   const {currentConservation} = useSelector(state => state.conservation)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -36,9 +39,14 @@ export default function ChatContent() {
 
   return (
     <div className='flex-1 h-full flex flex-col'>
-      <ChatContentHeader/>
-      <ChatContentMessage/>
-      <ChatContentAction/>
+      {files.length > 0 && 
+        <FilePreview/>}
+        <>
+          <ChatContentHeader/>
+          <ChatContentMessage/>
+          <ChatContentAction/>
+        </>
+    
     </div>
   )
 }

@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { HiOutlinePaperClip } from "react-icons/hi";
 import { BiRightArrowAlt } from "react-icons/bi";
 import { useDispatch, useSelector } from 'react-redux';
-import { createMessage } from '../../../../../redux/messageSlice';
+import { addFile, createMessage } from '../../../../../redux/messageSlice';
 import {useSocket} from "./../../../../../contexts/socket.context"
 import { updateLatestMessage } from '../../../../../redux/conservationSlice';
 
 export default function ChatContentAction() {
+    const fileRef = useRef()
     const {socket} = useSocket();
     const [message, setMessage] = useState('');
     const {isLoading} = useSelector(state => state.message);
@@ -25,11 +26,28 @@ export default function ChatContentAction() {
 
     }
 
+    const selectFileHandler = (e) => {
+        const {files} = e.target;
+        
+        for(let i = 0; i < files.length; i++){
+            const file = files[i]
+            const {name, size, type} = file;
+            console.log(file)
+            const reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = () => {
+                dispatch(addFile({type, data: reader.result}))
+            }
+        }
+        
+    }
+
     return (
         <div className='p-2 bg-base-200'>
             <div className='flex gap-2 items-center'>
-                <button className='btn btn-glass'>
+                <button className='btn btn-glass' onClick={() => fileRef.current.click()}>
                     <HiOutlinePaperClip className='w-6 h-6 text-primary'/>
+                    <input multiple onChange={selectFileHandler} type='file' hidden ref={fileRef}/>    
                 </button>
 
                 <form onSubmit={sendMessageHandler} className='flex-1 flex gap-2'>

@@ -8,7 +8,7 @@ export default function MessageItem({message}) {
     const isUserMessage = () => {
         return message.sender._id === currentUser._id
     }
-console.log(message)
+    
     const {content, createdAt, sender} = message
   return (
     // <div className={`flex flex-col gap-1 p-2 rounded-2xl w-fit max-w-[450px] ${isUserMessage() ? 'bg-primary text-white self-end': 'bg-gray-200 '}`}>

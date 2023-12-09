@@ -4,6 +4,7 @@ import MessageService from "./../services/message.api"
 const initialState = {
     messages: [],
     files: [],
+    currentIndexFile: 0,
     isLoading: false,
     error: null
 }
@@ -30,6 +31,12 @@ const messageSlice = createSlice({
     reducers: {
         addMessage(state, action){
             state.messages = [...state.messages, action.payload];
+        },
+        addFile(state, action){
+            state.files = [...state.files, action.payload]
+        },
+        removeAllFile(state, action){
+            state.files = []
         }
     },
     extraReducers(builder){
@@ -54,6 +61,6 @@ const messageSlice = createSlice({
     }
 })
 
-export const {addMessage} = messageSlice.actions;
+export const {addMessage, addFile, removeAllFile} = messageSlice.actions;
 
 export default messageSlice.reducer;
